@@ -1,0 +1,25 @@
+#!/bin/bash
+LOG_DIR=/var/log
+ROOT_UID=0
+LINES=50
+E_XCD=66
+E_NOTROOT=87
+if [ "$UID" -ne "$ROOT_UID" ]
+then
+ echo "must be root to run this script" 
+ exit $E_NOTROOT
+fi
+if [ -n "$1" ]
+then
+ Lines=$1
+else
+ Lines=$LINES
+fi
+cd $LOG_DIR
+if [ `pwd`!= "$LOG_DIR" ]
+then
+ echo "cant change to $LOG_DIR."
+ exit $E_XCD
+fi
+tail -n $Lines messages > mesg.temp
+mv mesg.temp messages
